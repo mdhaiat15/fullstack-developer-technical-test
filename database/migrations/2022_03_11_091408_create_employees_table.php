@@ -18,6 +18,7 @@ class CreateEmployeesTable extends Migration
             $table->foreignId('position_id')->constrained();
             $table->string('name');
             $table->string('nip')->unique();
+            $table->string('departemen')->nullable();
             $table->string('tgl_lahir')->nullable();
             $table->string('thn_lahir')->nullable();
             $table->string('alamat')->nullable();
