@@ -14,6 +14,7 @@
 @endsection
 @section('content')
 <div class="card sm mb-4">
+    <button type="button" class="btn btn-xs btn-primary float-right add" id="btn-create-post">Tambah Data Jabatan</button>
     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
         <h6 class="m-0 font-weight-bold text-primary"></h6>
     </div>
@@ -24,12 +25,16 @@
                 <tr>
                   <th>No.</th>
                   <th>Name</th>
+                  <th>Departemen</th>
+                  <th width="100px">Action</th>
                 </tr>
               </thead>
             </table>
           </div>
     </div>
 </div>
+@include('components.position.modal-create')
+@include('components.position.modal-edit')
 @endsection
 
 @push('js')
@@ -42,7 +47,9 @@
         ajax: "{{ route('position.index') }}",
         columns: [
             { data: 'DT_RowIndex', orderable: false, searchable: false, className: "text-center"},
-            { data: 'name' }
+            { data: 'name' },
+            { data: 'departemen' },
+            {data: 'action', name: 'action', orderable: false, searchable: false},        
         ]
     })
 </script>
