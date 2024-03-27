@@ -19,12 +19,12 @@ class PositionController extends Controller
             $positions = Position::all();
             return datatables($positions)
                 ->addIndexColumn()
-                ->addColumn('action', function($row){
+                ->addColumn('action', function ($row) {
 
                     $btn = '
                     <div class="d-flex justify-content-between">
-                        <a href="javascript:void(0)" id="btn-edit-post" data-id="{{ $post->id }}" class="btn btn-primary btn-sm mr-2">EDIT</a>
-                        <a href="javascript:void(0)" id="btn-delete-post" data-id="{{ $post->id }}" class="btn btn-danger btn-sm">DELETE</a>
+                        <a href="javascript:void(0)" id="btn-edit-position" class="btn btn-primary btn-sm mr-2 btn-edit">EDIT</a>
+                        <a href="javascript:void(0)" id="btn-delete-position" data-rowid="' . $row->id . '" class="btn btn-danger btn-sm btn-delete">DELETE</a>
                     </div>';
 
                     return $btn;
@@ -66,7 +66,7 @@ class PositionController extends Controller
 
         //create post
         $post = Position::create([
-            'name'     => $request->name, 
+            'name'     => $request->name,
             'departemen'   => $request->departemen
         ]);
 
@@ -74,7 +74,7 @@ class PositionController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Data Berhasil Disimpan!',
-            'data'    => $post  
+            'data'    => $post
         ]);
     }
 
@@ -86,7 +86,11 @@ class PositionController extends Controller
      */
     public function show(Position $position)
     {
-        //
+        return response()->json([
+            'success' => true,
+            'message' => 'Detail Data Position',
+            'data'    => $position
+        ]);
     }
 
     /**
@@ -109,7 +113,29 @@ class PositionController extends Controller
      */
     public function update(Request $request, Position $position)
     {
-        //
+        //define validation rules
+        $validator = Validator::make($request->all(), [
+            'name'     => 'required',
+            'departemen'   => 'required',
+        ]);
+
+        //check if validation fails
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        //create post
+        $position->update([
+            'name'     => $request->name,
+            'departemen'   => $request->departemen
+        ]);
+
+        //return response
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Berhasil Diupdate!',
+            'data'    => $position
+        ]);
     }
 
     /**
@@ -118,8 +144,15 @@ class PositionController extends Controller
      * @param  \App\Models\Position  $position
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Position $position)
+    public function destroy($id)
     {
-        //
+        //delete post by ID
+        Position::where('id', $id)->delete();
+
+        //return response
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Berhasil Dihapus!',
+        ]);
     }
 }
